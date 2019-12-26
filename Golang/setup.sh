@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+# ACCOUNT_ID 185394215596
+# userProfile
+
+go get github.com/aws/aws-lambda-go/lambda
+GOOS=linux GOARCH=amd64 go build -o testLambda TestLambda.go
+zip testLambda.zip testLambda > /dev/null
+
+if [ -z "$USER_PROFILE" ]
+then
+    json_response="$(aws lambda create-function --function-name goTest --zip-file fileb://testLambda.zip \
+        --handler TestLambda:HandleRequest \
+        --runtime go1.x --role arn:aws:iam::${ACCOUNT_ID}:role/lambda-cli-role)"
+else
+    json_response="$(aws lambda create-function --function-name goTest --zip-file fileb://testLambda.zip \
+        --handler testLambda:HandleRequest \
+        --runtime go1.x --role arn:aws:iam::${ACCOUNT_ID}:role/lambda-cli-role --profile $USER_PROFILE)"
+fi
+
+echo "$(python2 -c "import sys, json; print json.load(sys.stdin)['FunctionArn'] " <<< "${json_response}")"
+
