@@ -40,8 +40,6 @@ then
         aws lambda add-permission --function-name $lambda_name --statement-id $lambda_name \
             --action lambda:InvokeFunction --principal apigateway.amazonaws.com \
             --source-arn arn:aws:execute-api:eu-west-1:${ACCOUNT_ID}:${rest_api_id}/*/*/*
-
-        aws apigateway create-deployment --rest-api-id $rest_api_id\ --stage-name staging
     }
 else
     aws iam create-role --role-name lambda-cli-role --assume-role-policy-document \
@@ -73,9 +71,6 @@ else
         aws lambda add-permission --function-name $lambda_name --statement-id $lambda_name \
             --action lambda:InvokeFunction --principal apigateway.amazonaws.com \
             --source-arn arn:aws:execute-api:eu-west-1:${ACCOUNT_ID}:${rest_api_id}/*/*/*  --profile $USER_PROFILE
-
-        aws apigateway create-deployment --rest-api-id $rest_api_id\ --stage-name staging \
-            --profile $USER_PROFILE
     }
 fi
 
