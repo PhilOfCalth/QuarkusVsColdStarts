@@ -3,7 +3,6 @@ package poc;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 
-
 import java.util.Date;
 
 public class TestLambda implements RequestHandler<InputObject, OutputObject>{

@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
-
-# ACCOUNT_ID 185394215596
-# $USER_PROFILE
+set -e
 
 export PYTHONIOENCODING=utf8
 
@@ -80,20 +78,19 @@ sleep 10
 cd Golang
 #lambda_arn=$(./setup.sh)
 #setUpAPIGateway "goTest"
-cd ../Java
-lambda_arn=$(./setup.sh)
-echo "arn = ${lambda_arn}"
-setUpAPIGateway 'javaTest'
+#cd ../Java
+#lambda_arn=$(./setup.sh)
+#setUpAPIGateway 'javaTest'
 #cd ../Node
 #lambda_arn=$(./setup.sh)
 #setUpAPIGateway 'nodeTest'
-cd ../Python
-lambda_arn=$(./setup.sh)
-setUpAPIGateway "pythonTest"
-#cd ../Quarkus/
+#cd ../Python
 #lambda_arn=$(./setup.sh)
-#setUpAPIGateway 'quarkusTest'
+#setUpAPIGateway "pythonTest"
+cd ../Quarkus/
+lambda_arn=$(./setup.sh)
+setUpAPIGateway 'quarkusTest'
+
+#echo "### Building the native linux zip from scratch with Quarkus and GraalVM... Will take a few minutes ###"
 #lambda_arn=$(./setupGraalVM.sh)
 #setUpAPIGateway 'quarkusGraalTest'
-
-#setUpAPIGateway "arn:aws:lambda:eu-west-1:185394215596:function:pythonTest"
