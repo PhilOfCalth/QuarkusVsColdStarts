@@ -6,3 +6,5 @@ then
 else
     aws lambda delete-function --function-name goTest --profile $USER_PROFILE
 fi
+
+rm testLambda testLambda.zip
