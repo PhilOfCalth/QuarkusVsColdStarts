@@ -16,7 +16,7 @@ public class TestLambda implements RequestHandler<InputObject, OutputObject> {
         long currentTime = (new Date()).getTime();
         long apiEpochTime = event.getRequestContext()
                                 .getRequestTimeEpoch();
-        String rsBody = event.getPath().substring(1) + " took " + (currentTime - apiEpochTime) + "ms to start";
+        String rsBody = event.getPath().substring(1) + " Lambda took " + (currentTime - apiEpochTime) + "ms to start";
 
         System.out.println(rsBody);
         return new OutputObject(200, rsBody);
