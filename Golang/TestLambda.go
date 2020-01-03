@@ -1,4 +1,4 @@
-package TestLambda
+package main
 
 import (
 	"context"
