@@ -6,12 +6,12 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import java.util.Date;
 
 public class TestLambda implements RequestHandler<InputObject, OutputObject>{
-    public OutputObject handleRequest(InputObject event, Context context) {
+    public OutputObject handleRequest(final InputObject event, final Context context) {
 
-        long currentTime = (new Date()).getTime();
-        long apiEpochTime = event.getRequestContext()
+        final long currentTime = (new Date()).getTime();
+        final long apiEpochTime = event.getRequestContext()
                                     .getRequestTimeEpoch();
-        String rsBody = "Java Test Lambda took " + (currentTime - apiEpochTime) + "ms to start";
+        final String rsBody = "Java Test Lambda took " + (currentTime - apiEpochTime) + "ms to start";
 
         System.out.println(rsBody);
         return new OutputObject(200, rsBody);
