@@ -1,7 +1,8 @@
 # QuarkusVsColdStarts
 A quick comparison between cold start times for different common languages on AWS Lambda. There is a focus on the usage of Quarkus and GraalVM, to speed up Java's cold start time.
 
-For use in Naimuri insight/blog post.
+For use in Naimuri insight/blog post:
+https://www.naimuri.com/solving_java_cold_starts/
 
 ## High Level Design Principle
 Deploy the test lambda's behind a restful API Gateway, with API 'proxy' activated, to allow the cold start time to be measured. Java, Python, Node and Golang have been selected to be compared. Scripts are written to create, invoke and delete everything using the AWS CLI. After initial creation, the lambdas need to be given time to go cold, before being invoked.
