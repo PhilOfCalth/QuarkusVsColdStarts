@@ -7,6 +7,7 @@ if [ -z "$ACCOUNT_ID" ]
 then
     echo "You must specify a valid ACOUNT_ID. Usage:"
     echo "ACCOUNT_ID=<account id> [USER_PROFILE=<user profile>] ./setupAll.sh"
+    exit 1
 fi
 
 if [[ -z "$USER_PROFILE" ]]
@@ -79,10 +80,15 @@ lambda_arn=$(./setup.sh)
 setUpAPIGateway 'javaTest'
 if [[ -z "$USER_PROFILE" ]]
 then
-  aws lambda put-function-concurrency --function-name  javaTest --reserved-concurrent-executions 2
+  json_response="$(aws lambda publish-version --function-name javaTest)"
+  version=$(python2 -c "import sys, json; print json.load(sys.stdin)['Version'] " <<< "${json_response}")
+  aws lambda put-provisioned-concurrency-config --function-name javaTest --qualifier $version \
+      --provisioned-concurrent-executions 2
 else
-  aws lambda put-function-concurrency --function-name  javaTest --profile $USER_PROFILE  \
-      --reserved-concurrent-executions 2
+  json_response="$(aws lambda publish-version --function-name javaTest  --profile $USER_PROFILE)"
+  version=$(python2 -c "import sys, json; print json.load(sys.stdin)['Version'] " <<< "${json_response}")
+  aws lambda put-provisioned-concurrency-config --function-name javaTest --profile $USER_PROFILE  \
+       --qualifier $version --provisioned-concurrent-executions 2
 fi
 
 cd ../Quarkus/

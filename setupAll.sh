@@ -7,6 +7,7 @@ if [ -z "$ACCOUNT_ID" ]
 then
     echo "You must specify a valid ACOUNT_ID. Usage:"
     echo "ACCOUNT_ID=<account id> [USER_PROFILE=<user profile>] ./setupAll.sh"
+    exit 1
 fi
 
 if [[ -z "$USER_PROFILE" ]]
