@@ -11,7 +11,7 @@ fi
 
 if [[ -z "$USER_PROFILE" ]]
 then
-    aws iam create-role --role-name lambda-cli-role --assume-role-policy-document file://trust-policy.json
+    aws iam create-role --role-name lambda-cli-role --assume-role-policy-document file://../trust-policy.json
     aws iam attach-role-policy --role-name lambda-cli-role \
                         --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
 
@@ -40,7 +40,7 @@ then
     }
 else
     aws iam create-role --role-name lambda-cli-role --assume-role-policy-document \
-                                        --profile $USER_PROFILE file://trust-policy.json
+                                        --profile $USER_PROFILE file://../trust-policy.json
     aws iam attach-role-policy --role-name lambda-cli-role --profile $USER_PROFILE \
                         --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
 
@@ -74,22 +74,18 @@ fi
 echo "### Waiting for Role to be usable ###"
 sleep 10
 
-cd Golang
-lambda_arn=$(./setup.sh)
-setUpAPIGateway "goTest"
 cd ../Java
 lambda_arn=$(./setup.sh)
 setUpAPIGateway 'javaTest'
-cd ../Node
-lambda_arn=$(./setup.sh)
-setUpAPIGateway 'nodeTest'
-cd ../Python
-lambda_arn=$(./setup.sh)
-setUpAPIGateway "pythonTest"
-cd ../Quarkus/
-lambda_arn=$(./setup.sh)
-setUpAPIGateway 'quarkusTest'
+if [[ -z "$USER_PROFILE" ]]
+then
+  aws lambda put-function-concurrency --function-name  javaTest --reserved-concurrent-executions 2
+else
+  aws lambda put-function-concurrency --function-name  javaTest --profile $USER_PROFILE  \
+      --reserved-concurrent-executions 2
+fi
 
+cd ../Quarkus/
 echo "### Building the native linux zip from scratch with Quarkus and GraalVM... This will take a few minutes ###"
 lambda_arn=$(./setupGraalVM.sh)
 setUpAPIGateway 'quarkusGraalTest'

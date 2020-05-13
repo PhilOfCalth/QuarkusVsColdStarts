@@ -8,8 +8,14 @@ resource_ids="$(python2 getTestIDsFromApiJsonRS.py 'Test' 'path' <<< "${json_res
 
 for resource_id in ${resource_ids}
 do
-    json_response="$(aws apigateway test-invoke-method --rest-api-id $api_id --resource-id $resource_id --http-method "GET" \
-                             --profile $USER_PROFILE)"
+    if [[ -z "$USER_PROFILE" ]]
+    then
+        json_response="$(aws apigateway test-invoke-method --rest-api-id $api_id --resource-id $resource_id --http-method "GET" \
+                          --profile $USER_PROFILE)"
+    else
+        json_response="$(aws apigateway test-invoke-method --rest-api-id $api_id --resource-id $resource_id --http-method "GET" \
+                          --profile $USER_PROFILE)"
+    fi
 
     echo "$(python2 -c "import sys, json; print json.load(sys.stdin)['body'] " <<< "${json_response}")"
     echo

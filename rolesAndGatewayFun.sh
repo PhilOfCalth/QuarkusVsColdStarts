@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-set -e
 
 export PYTHONIOENCODING=utf8
 
@@ -54,7 +53,7 @@ else
     function setUpAPIGateway(){
         lambda_name="$1"
 
-        json_response="$(aws apigateway create-resource --rest-api-id $rest_api_id \
+        json_response="$(aws/. apigateway create-resource --rest-api-id $rest_api_id \
             --parent-id $root_path_id --path-part $lambda_name --profile $USER_PROFILE)"
         resource_id=$(python2 -c "import sys, json; print json.load(sys.stdin)['id'] " <<< "${json_response}")
         aws apigateway put-method --rest-api-id $rest_api_id --resource-id $resource_id \
@@ -70,26 +69,3 @@ else
             --source-arn arn:aws:execute-api:eu-west-1:${ACCOUNT_ID}:${rest_api_id}/*/*/*  --profile $USER_PROFILE
     }
 fi
-
-echo "### Waiting for Role to be usable ###"
-sleep 10
-
-cd Golang
-lambda_arn=$(./setup.sh)
-setUpAPIGateway "goTest"
-cd ../Java
-lambda_arn=$(./setup.sh)
-setUpAPIGateway 'javaTest'
-cd ../Node
-lambda_arn=$(./setup.sh)
-setUpAPIGateway 'nodeTest'
-cd ../Python
-lambda_arn=$(./setup.sh)
-setUpAPIGateway "pythonTest"
-cd ../Quarkus/
-lambda_arn=$(./setup.sh)
-setUpAPIGateway 'quarkusTest'
-
-echo "### Building the native linux zip from scratch with Quarkus and GraalVM... This will take a few minutes ###"
-lambda_arn=$(./setupGraalVM.sh)
-setUpAPIGateway 'quarkusGraalTest'

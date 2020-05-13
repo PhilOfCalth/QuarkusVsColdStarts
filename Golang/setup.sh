@@ -20,4 +20,3 @@ else
 fi
 
 echo "$(python2 -c "import sys, json; print json.load(sys.stdin)['FunctionArn'] " <<< "${json_response}")"
-
