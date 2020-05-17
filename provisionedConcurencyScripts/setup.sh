@@ -77,7 +77,6 @@ sleep 10
 
 cd ../Java
 lambda_arn=$(./setup.sh)
-setUpAPIGateway 'javaTest'
 if [[ -z "$USER_PROFILE" ]]
 then
   json_response="$(aws lambda publish-version --function-name javaTest)"
@@ -90,6 +89,8 @@ else
   aws lambda put-provisioned-concurrency-config --function-name javaTest --profile $USER_PROFILE  \
        --qualifier $version --provisioned-concurrent-executions 2
 fi
+lambda_arn="${lambda_arn}:${version}"
+setUpAPIGateway 'javaTest'
 
 cd ../Quarkus/
 echo "### Building the native linux zip from scratch with Quarkus and GraalVM... This will take a few minutes ###"
