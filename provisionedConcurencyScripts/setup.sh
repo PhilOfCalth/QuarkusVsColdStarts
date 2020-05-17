@@ -83,14 +83,33 @@ then
   version=$(python2 -c "import sys, json; print json.load(sys.stdin)['Version'] " <<< "${json_response}")
   aws lambda put-provisioned-concurrency-config --function-name javaTest --qualifier $version \
       --provisioned-concurrent-executions 2
+
+  lambda_arn="${lambda_arn}:${version}"
+  setUpAPIGateway 'javaTest'
+
+  aws lambda add-permission --function-name $lambda_arn --statement-id javaTestVersionPermission \
+     --action lambda:InvokeFunction --principal apigateway.amazonaws.com \
+     --source-arn arn:aws:execute-api:eu-west-1:${ACCOUNT_ID}:${rest_api_id}/*/*/* \
+     --qualifier $version
 else
   json_response="$(aws lambda publish-version --function-name javaTest  --profile $USER_PROFILE)"
   version=$(python2 -c "import sys, json; print json.load(sys.stdin)['Version'] " <<< "${json_response}")
   aws lambda put-provisioned-concurrency-config --function-name javaTest --profile $USER_PROFILE  \
-       --qualifier $version --provisioned-concurrent-executions 2
+    --qualifier $version --provisioned-concurrent-executions 2
+
+  lambda_arn="${lambda_arn}:${version}"
+  setUpAPIGateway 'javaTest'
+
+  echo "aws lambda add-permission --function-name $lambda_arn --statement-id javaTestVersionPermission \
+    --action lambda:InvokeFunction --principal apigateway.amazonaws.com \
+    --source-arn arn:aws:execute-api:eu-west-1:${ACCOUNT_ID}:${rest_api_id}/*/*/*  --profile $USER_PROFILE\
+    --revision-id version"
+
+  aws lambda add-permission --function-name $lambda_arn --statement-id javaTestVersionPermission \
+    --action lambda:InvokeFunction --principal apigateway.amazonaws.com \
+    --source-arn arn:aws:execute-api:eu-west-1:${ACCOUNT_ID}:${rest_api_id}/*/*/*  --profile $USER_PROFILE\
+    --qualifier $version
 fi
-lambda_arn="${lambda_arn}:${version}"
-setUpAPIGateway 'javaTest'
 
 cd ../Quarkus/
 echo "### Building the native linux zip from scratch with Quarkus and GraalVM... This will take a few minutes ###"
