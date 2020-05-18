@@ -32,6 +32,16 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-amazon-lambda</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-test-amazon-lambda</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-junit5</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -39,9 +49,6 @@
                 <groupId>io.quarkus</groupId>
                 <artifactId>quarkus-maven-plugin</artifactId>
                 <version>${quarkus.version}</version>
-                <configuration>
-                    <uberJar>true</uberJar>
-                </configuration>
                 <executions>
                     <execution>
                         <goals>
@@ -86,31 +93,6 @@
                                 </goals>
                                 <configuration>
                                     <enableHttpUrlHandler>true</enableHttpUrlHandler>
-<!--                                    <enableJni>true</enableJni>-->
-<!--                                    <enableAllSecurityServices>true</enableAllSecurityServices>-->
-<!--                                    <initializeAtBuildTime>true</initializeAtBuildTime>-->
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-assembly-plugin</artifactId>
-                        <version>3.1.0</version>
-                        <executions>
-                            <execution>
-                                <id>zip-assembly</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>single</goal>
-                                </goals>
-                                <configuration>
-                                    <finalName>TestLambda</finalName>
-                                    <descriptors>
-                                        <descriptor>src/assembly/zip.xml</descriptor>
-                                    </descriptors>
-                                    <attach>false</attach>
-                                    <appendAssemblyId>false</appendAssemblyId>
                                 </configuration>
                             </execution>
                         </executions>

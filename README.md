@@ -24,6 +24,7 @@ EG: `ACCOUNT_ID=123456789012 USER_PROFILE=testUser ./tearDownAll.sh`
 If you wish to just deploy and test one of the lambdas, without the api gateway, this can be done by running the setup script within its directory. The same environment variables as above need to be set, for it to successfully complete. You can test it through the AWS console, but it will need a Test Event set up to simulate what the API gateway would send, populated with the only data we care about `requestTimeEpoch`
 ```
 {
+  "path": "/test",
   "requestContext": {
       "requestTimeEpoch": <past epoch timestamp in ms>
   }
@@ -32,6 +33,7 @@ If you wish to just deploy and test one of the lambdas, without the api gateway,
 EG:
 ```
 {
+  "path": "/test",
   "requestContext": {
       "requestTimeEpoch": 1578061743
   }
