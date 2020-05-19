@@ -110,8 +110,8 @@ else
     --source-arn arn:aws:execute-api:eu-west-1:${ACCOUNT_ID}:${rest_api_id}/*/*/*  --profile $USER_PROFILE\
     --qualifier $version
 fi
-
-cd ../Quarkus/
-echo "### Building the native linux zip from scratch with Quarkus and GraalVM... This will take a few minutes ###"
-lambda_arn=$(./setupGraalVM.sh)
-setUpAPIGateway 'quarkusGraalTest'
+#
+#cd ../Quarkus/
+#echo "### Building the native linux zip from scratch with Quarkus and GraalVM... This will take a few minutes ###"
+#lambda_arn=$(./setupGraalVM.sh)
+#setUpAPIGateway 'quarkusGraalTest'

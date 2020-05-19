@@ -29,5 +29,5 @@ fi
 
 cd ../Java
 ./tearDown.sh
-cd ../Quarkus/
-./tearDownGraalVM.sh
+#cd ../Quarkus/
+#./tearDownGraalVM.sh

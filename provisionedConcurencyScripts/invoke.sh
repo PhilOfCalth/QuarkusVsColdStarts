@@ -11,8 +11,7 @@ do
     do
         if [[ -z "$USER_PROFILE" ]]
         then
-            json_response="$(aws apigateway test-invoke-method --rest-api-id $api_id --resource-id $resource_id --http-method "GET" \
-                                 --profile $USER_PROFILE)"
+            json_response="$(aws apigateway test-invoke-method --rest-api-id $api_id --resource-id $resource_id --http-method "GET" )"
         else
             json_response="$(aws apigateway test-invoke-method --rest-api-id $api_id --resource-id $resource_id --http-method "GET" \
                                  --profile $USER_PROFILE)"
