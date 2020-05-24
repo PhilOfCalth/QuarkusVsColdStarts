@@ -32,6 +32,8 @@ cd Golang
 ./tearDown.sh
 cd ../Java
 ./tearDown.sh
+cd ../Java11
+./tearDown.sh
 cd ../Node
 ./tearDown.sh
 cd ../Python

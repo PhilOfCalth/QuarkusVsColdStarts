@@ -81,6 +81,9 @@ setUpAPIGateway "goTest"
 cd ../Java
 lambda_arn=$(./setup.sh)
 setUpAPIGateway 'javaTest'
+cd ../Java11
+lambda_arn=$(./setup.sh)
+setUpAPIGateway 'java11Test'
 cd ../Node
 lambda_arn=$(./setup.sh)
 setUpAPIGateway 'nodeTest'
@@ -91,6 +94,6 @@ cd ../Quarkus/
 lambda_arn=$(./setup.sh)
 setUpAPIGateway 'quarkusTest'
 
-echo "### Building the native linux zip from scratch with Quarkus and GraalVM... This will take a few minutes ###"
-lambda_arn=$(./setupGraalVM.sh)
-setUpAPIGateway 'quarkusGraalTest'
+#echo "### Building the native linux zip from scratch with Quarkus and GraalVM... This will take a few minutes ###"
+#lambda_arn=$(./setupGraalVM.sh)
+#setUpAPIGateway 'quarkusGraalTest'

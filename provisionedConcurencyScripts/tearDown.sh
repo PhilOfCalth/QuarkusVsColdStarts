@@ -7,7 +7,7 @@ then
     aws iam delete-role --role-name lambda-cli-role
 
     json_response="$(aws apigateway get-rest-apis)"
-    aip_ids="$(python2 ../getTestIDsFromApiJsonRS.py 'quarkusVsJava-api' 'name' <<< "${json_response}")"
+    aip_ids="$(python2 ../getTestIDsFromApiJsonRS.py 'provisionedConcurnecy' 'name' <<< "${json_response}")"
 
     for aip_id in ${aip_ids}
     do
@@ -19,7 +19,7 @@ else
     aws iam delete-role --role-name lambda-cli-role  --profile $USER_PROFILE
 
     json_response="$(aws apigateway get-rest-apis --profile $USER_PROFILE)"
-    aip_ids="$(python2 ../getTestIDsFromApiJsonRS.py 'quarkusVsJava-api' 'name' <<< "${json_response}")"
+    aip_ids="$(python2 ../getTestIDsFromApiJsonRS.py 'provisionedConcurnecy' 'name' <<< "${json_response}")"
 
     for aip_id in ${aip_ids}
     do
@@ -29,5 +29,7 @@ fi
 
 cd ../Java
 ./tearDown.sh
-#cd ../Quarkus/
-#./tearDownGraalVM.sh
+cd ../Java11
+./tearDown.sh
+cd ../Python/
+./tearDown.sh

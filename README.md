@@ -42,3 +42,7 @@ EG:
 
 ## Validity of this Test
 Of course this is just one benchmark. There are no dependencies, no database connections and the code is extremely simple. Different languages, or indeed different flavors of Java may perform differently under different circumstances.
+
+## Provisioned Concurrency
+The research done for the provisioned concurrency piece was done here as there is a lot of overlap in terms of the scripts used. Please see the full readme here:
+
