@@ -14,11 +14,11 @@ Deploy the test lambda's behind a restful API Gateway, with API 'proxy' activate
 * AWS Account
 * AWS CLI
 
-Each individual script `setupAll.sh`, `invokeAll.sh` and `tearDownAll.sh` need to be called manually. The scripts require an environment variable `ACCOUNT_ID` set to your account's ID, to run. If you have set up your AWS CLI to use a profile, the scripts can be set to use it by setting the environment variable `USER_PROFILE`
+Each individual script `setupAll.sh`, `invokeAll.sh` and `tearDownAll.sh` need to be called manually. The scripts require an environment variable `ACCOUNT_ID` set to your account's ID, to run. If you have set up your AWS CLI to use a profile, the scripts can be set to use it by setting the environment variable `AWS_PROFILE`
 
-Usage: `ACCOUNT_ID=<account id> [USER_PROFILE=<user profile>] ./<script>`
+Usage: `ACCOUNT_ID=<account id> [AWS_PROFILE=<user profile>] ./<script>`
 
-EG: `ACCOUNT_ID=123456789012 USER_PROFILE=testUser ./tearDownAll.sh`
+EG: `ACCOUNT_ID=123456789012 AWS_PROFILE=testUser ./tearDownAll.sh`
 
 ## Testing a lambda without the API Gateway
 If you wish to just deploy and test one of the lambdas, without the api gateway, this can be done by running the setup script within its directory. The same environment variables as above need to be set, for it to successfully complete. You can test it through the AWS console, but it will need a Test Event set up to simulate what the API gateway would send, populated with the only data we care about `requestTimeEpoch`
