@@ -6,7 +6,8 @@
       "Action": [
         "logs:CreateLogGroup",
         "logs:CreateLogStream",
-        "logs:PutLogEvents"
+        "logs:PutLogEvents",
+        "xray:PutTraceSegments"
       ],
       "Resource": "*"
     }

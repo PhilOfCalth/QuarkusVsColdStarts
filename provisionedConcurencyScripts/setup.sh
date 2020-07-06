@@ -37,15 +37,17 @@ function setUpAPIGateway() {
       --source-arn arn:aws:execute-api:eu-west-1:${ACCOUNT_ID}:${rest_api_id}/*/*/*
 }
 
-function setupVersion() {
+function setupAlias() {
 
   lambda_name="$1"
   json_response="$(aws lambda publish-version --function-name $lambda_name)"
   version=$(python2 -c "import sys, json; print json.load(sys.stdin)['Version'] " <<<"${json_response}")
+  json_response="$(aws lambda create-alias --function-name $lambda_name --name $lambda_name --function-version $version)"
+  arn=$(python2 -c "import sys, json; print json.load(sys.stdin)['AliasArn'] " <<<"${json_response}")
   aws lambda put-provisioned-concurrency-config --function-name $lambda_name \
       --qualifier $version --provisioned-concurrent-executions 2 >/dev/null
 
-  echo $version
+  echo arn
 }
 
 function setupProvisionedConcurency() {
@@ -62,22 +64,19 @@ echo "### Waiting for Role to be usable ###"
 sleep 10
 
 cd ../Java
-lambda_arn=$(./setup.sh)
-version=$(setupVersion 'javaTest')
-lambda_arn="${lambda_arn}:${version}"
+./setup.sh
+lambda_arn=$(setupAlias 'javaTest')
 setUpAPIGateway 'javaTest'
 setupProvisionedConcurency $lambda_arn $version
 
 cd ../Java11
-lambda_arn=$(./setup.sh)
-version=$(setupVersion 'java11Test')
-lambda_arn="${lambda_arn}:${version}"
+./setup.sh
+lambda_arn=$(setupAlias 'java11Test')
 setUpAPIGateway 'java11Test'
 setupProvisionedConcurency $lambda_arn $version
 
 cd ../Python
-lambda_arn=$(./setup.sh)
-version=$(setupVersion 'pythonTest')
-lambda_arn="${lambda_arn}:${version}"
+./setup.sh
+lambda_arn=$(setupAlias 'pythonTest')
 setUpAPIGateway 'pythonTest'
 setupProvisionedConcurency $lambda_arn $version
