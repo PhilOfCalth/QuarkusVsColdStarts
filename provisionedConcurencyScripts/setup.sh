@@ -31,7 +31,6 @@ function setUpAPIGateway() {
   aws apigateway put-integration --rest-api-id $rest_api_id --resource-id $resource_id --http-method GET \
       --type AWS_PROXY --integration-http-method POST \
       --uri arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/${lambda_arn}/invocations
-
   aws lambda add-permission --function-name $lambda_name --statement-id $lambda_name \
       --action lambda:InvokeFunction --principal apigateway.amazonaws.com \
       --source-arn arn:aws:execute-api:eu-west-1:${ACCOUNT_ID}:${rest_api_id}/*/*/*
@@ -42,12 +41,10 @@ function setupAlias() {
   lambda_name="$1"
   json_response="$(aws lambda publish-version --function-name $lambda_name)"
   version=$(python2 -c "import sys, json; print json.load(sys.stdin)['Version'] " <<<"${json_response}")
-  json_response="$(aws lambda create-alias --function-name $lambda_name --name $lambda_name --function-version $version)"
-  arn=$(python2 -c "import sys, json; print json.load(sys.stdin)['AliasArn'] " <<<"${json_response}")
-  aws lambda put-provisioned-concurrency-config --function-name $lambda_name \
-      --qualifier $version --provisioned-concurrent-executions 2 >/dev/null
+  json_response="$(aws lambda create-alias --function-name $lambda_name --name provCon --function-version $version)"
 
-  echo arn
+  echo $(python2 -c "import sys, json; print json.load(sys.stdin)['AliasArn'] " <<<"${json_response}")
+
 }
 
 function setupProvisionedConcurency() {
@@ -57,7 +54,10 @@ function setupProvisionedConcurency() {
   aws lambda add-permission --function-name $lambda_arn --statement-id javaTestVersionPermission \
       --action lambda:InvokeFunction --principal apigateway.amazonaws.com \
       --source-arn arn:aws:execute-api:eu-west-1:${ACCOUNT_ID}:${rest_api_id}/*/*/* \
-      --qualifier $version
+      #--qualifier $version
+
+  aws lambda put-provisioned-concurrency-config --function-name $lambda_arn \
+      --provisioned-concurrent-executions 2 --qualifier provCon
 }
 
 echo "### Waiting for Role to be usable ###"
