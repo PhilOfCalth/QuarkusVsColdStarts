@@ -45,4 +45,4 @@ Of course this is just one benchmark. There are no dependencies, no database con
 
 ## Provisioned Concurrency
 The research done for the provisioned concurrency piece was done here as there is a lot of overlap in terms of the scripts used. Please see the full readme here:
-
+[ProvisionedConcurencyScripts](provisionedConcurencyScripts/readme.md)
